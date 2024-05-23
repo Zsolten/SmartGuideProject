@@ -20,6 +20,9 @@ public class Location extends BaseEntity {
     private String city;
 
     @NotNull
+    private String pictureUrl;
+
+    @NotNull
     private String category;
 
     @NotNull

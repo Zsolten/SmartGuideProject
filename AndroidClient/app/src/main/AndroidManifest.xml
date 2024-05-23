@@ -3,12 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <application
+        android:name=".ui.screen.permissions.LocationApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -18,8 +22,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Smartguide"
         android:usesCleartextTraffic="true"
-
         tools:targetApi="31">
+
+        <service
+            android:name=".permissions.locationTracking.LocationService"
+            android:foregroundServiceType="location"
+            tools:ignore="ForegroundServicePermission" >
+        </service>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

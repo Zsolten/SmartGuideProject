@@ -11,6 +11,8 @@ public class LocationInDto {
     @NotNull
     private String city;
     @NotNull
+    private String pictureUrl;
+    @NotNull
     private String category;
     @NotNull
     private String description;

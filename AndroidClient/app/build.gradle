@@ -61,6 +61,8 @@ dependencies {
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
 
+    implementation "com.google.accompanist:accompanist-systemuicontroller:0.27.0"
+
     // Integration with activities
     implementation 'androidx.activity:activity-compose:1.9.0'
     // Integration with ViewModels
@@ -75,6 +77,8 @@ dependencies {
     implementation("com.google.maps.android:maps-compose:2.11.5")
 
     implementation "androidx.compose.animation:animation:1.6.7"
+
+    implementation ("com.google.accompanist:accompanist-permissions:0.24.13-rc")
 
     // google map services
     implementation("com.google.android.gms:play-services-maps:18.2.0")
