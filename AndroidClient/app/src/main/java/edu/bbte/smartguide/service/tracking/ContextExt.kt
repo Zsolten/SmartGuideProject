@@ -1,4 +1,4 @@
-package edu.bbte.smartguide.permissions.locationTracking
+package edu.bbte.smartguide.service.tracking
 
 import android.Manifest
 import android.content.Context

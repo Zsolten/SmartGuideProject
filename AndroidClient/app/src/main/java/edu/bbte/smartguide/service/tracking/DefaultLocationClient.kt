@@ -1,4 +1,4 @@
-package edu.bbte.smartguide.permissions.locationTracking
+package edu.bbte.smartguide.service.tracking
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -27,11 +27,9 @@ class DefaultLocationClient(
                 throw LocationClient.LocationException("Missing location permission")
             }
 
-            val locationManager =
-                context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
             val isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-            val isNetworkEnabled =
-                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+            val isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
 
             if (!isGpsEnabled && !isNetworkEnabled) {
                 throw LocationClient.LocationException("GPS is disabled")
@@ -60,39 +58,4 @@ class DefaultLocationClient(
             }
         }
     }
-
-//    @SuppressLint("MissingPermission")
-//    override fun getCurrentLocation(): Location {
-//
-//        if (!context.hasLocationPermission()) {
-//            throw LocationClient.LocationException("Missing location permission")
-//        }
-//
-//        val locationManager =
-//            context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-//        val isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-//        val isNetworkEnabled =
-//            locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-//
-//        if (!isGpsEnabled && !isNetworkEnabled) {
-//            throw LocationClient.LocationException("GPS is disabled")
-//        }
-//
-//        val locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 0).build()
-//
-//        val locationCallback = object : LocationCallback() {
-//            override fun onLocationResult(result: LocationResult) {
-//                super.onLocationResult(result)
-//                client.removeLocationUpdates(this)
-//                cont.resume(result.lastLocation)
-//            }
-//        }
-//
-//        client.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
-//        cont.invokeOnCancellation {
-//            client.removeLocationUpdates(locationCallback)
-//        }
-//    }
-//    }
-
 }

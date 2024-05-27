@@ -1,5 +1,8 @@
 package edu.bbte.smartguide.ui.screen
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.pm.PackageManager
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,8 +24,11 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
@@ -31,17 +37,51 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.ActivityCompat
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
+import com.google.android.gms.tasks.CancellationTokenSource
 import edu.bbte.smartguide.ui.viewModel.HomeViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
+@SuppressLint("CoroutineCreationDuringComposition", "StateFlowValueCalledInComposition")
 @Composable
 fun LocationsList(navHostController: NavHostController, viewModel: HomeViewModel) {
+
+    // Loading distance information
+    val context = LocalContext.current
+    val locationClient = remember {
+        LocationServices.getFusedLocationProviderClient(context)
+    }
     val locationsData by viewModel.locationsData.collectAsState()
+
+    LaunchedEffect(Unit) {
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            locationClient.getCurrentLocation(
+                Priority.PRIORITY_HIGH_ACCURACY,
+                CancellationTokenSource().token
+            ).addOnSuccessListener {
+                if (it != null) {
+                    viewModel.updateWithDistance(it.latitude, it.longitude)
+                }
+            }
+        }
+    }
 
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(10.dp),
@@ -113,9 +153,9 @@ fun LocationsList(navHostController: NavHostController, viewModel: HomeViewModel
                                 )
                             )
 
-                            if (locationsData[it].distance != 0L) {
+                            if (locationsData[it].distance != 0.0) {
                                 Text(
-                                    text = "${locationsData[it].distance} km",
+                                    text = "${locationsData[it].distance.toLong()} km",
                                     style = TextStyle(
                                         fontSize = 16.sp,
                                         color = Color(0xFFE2F1E6),
@@ -131,4 +171,9 @@ fun LocationsList(navHostController: NavHostController, viewModel: HomeViewModel
             }
         }
     }
+}
+
+@Composable
+fun loadLocations(){
+
 }

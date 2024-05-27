@@ -1,10 +1,14 @@
-package edu.bbte.smartguide.permissions.locationTracking
+package edu.bbte.smartguide.service.tracking
 
 import android.app.NotificationManager
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ServiceInfo
+import android.os.Binder
+import android.os.Build
 import android.os.IBinder
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.android.gms.location.LocationServices
 import edu.bbte.smartguide.R
@@ -20,8 +24,13 @@ class LocationService: Service() {
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private lateinit var locationClient: LocationClient
 
-    override fun onBind(p0: Intent?): IBinder? {
-        return null
+    private val binder = LocalBinder()
+    inner class LocalBinder: Binder() {
+        fun getService(): LocationService = this@LocationService
+    }
+
+    override fun onBind(p0: Intent?): IBinder {
+        return binder
     }
 
     override fun onCreate() {
@@ -43,11 +52,12 @@ class LocationService: Service() {
     private fun start() {
         val notification = NotificationCompat.Builder(this, "location")
             .setContentTitle("Smart Audio Guide is active")
-            .setContentText("Location: null")
-            .setSmallIcon(R.drawable.ic_launcher_background)
+            .setContentText("Location: ?")
+            .setSmallIcon(R.drawable.ic_launcher_foreground )
             .setOngoing(true)
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
 
         locationClient
             .getLocationUpdates(10000L) //10sec
@@ -55,15 +65,21 @@ class LocationService: Service() {
             .onEach { location ->
                 val lat = location.latitude
                 val long = location.longitude
-                val updatedNotification = notification.setContentText( // For Testing Purposes
-                    "Location: ($lat, $long)"
-                )
-                notificationManager.notify(1, updatedNotification.build())
+
+                Log.d("LocationService", "Location: ($lat, $long)")
+
+//                locationCallback?.onLocationUpdated(lat, long)
+
+                val updateNotification = notification.setContentText("Location: ($lat, $long)")
+                notificationManager.notify(1, updateNotification.build())
             }
             .launchIn(serviceScope)
 
-        startForeground(1, notification.build())
-    }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            startForeground(1, notification.build(), ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION)
+        } else {
+            startForeground(1, notification.build(),)
+        }    }
 
     private fun stop() {
         stopForeground(STOP_FOREGROUND_DETACH)

@@ -7,12 +7,15 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
-        android:name=".ui.screen.permissions.LocationApp"
+        android:enableOnBackInvokedCallback="true"
+        android:name=".ui.notification.LocationApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -22,13 +25,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Smartguide"
         android:usesCleartextTraffic="true"
-        tools:targetApi="31">
+        tools:targetApi="tiramisu">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCvBAXmYfvu3ptqfR7C75jC5YI6jR961s8" />
+
+        <receiver android:name=".ui.geofence.GeofenceBroadcastReceiver"
+            android:exported="true"
+            android:permission="android.permission.ACCESS_BACKGROUND_LOCATION"/>
 
         <service
-            android:name=".permissions.locationTracking.LocationService"
+            android:name=".service.tracking.LocationService"
             android:foregroundServiceType="location"
-            tools:ignore="ForegroundServicePermission" >
-        </service>
+            />
+        <!--            tools:ignore="ForegroundServicePermission"-->
 
         <activity
             android:name=".MainActivity"

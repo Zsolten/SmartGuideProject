@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class RegionOutDto {
+    private Long id;
     private String name;
     private Double latitude;
     private Double longitude;

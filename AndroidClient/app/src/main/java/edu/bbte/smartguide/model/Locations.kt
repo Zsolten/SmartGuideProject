@@ -1,6 +1,6 @@
 package edu.bbte.smartguide.model
 
-class Location(
+class Locations(
     val id: Long,
     val name: String,
     val pictureUrl: String,
@@ -10,5 +10,5 @@ class Location(
     val openHours: String,
     val prices: String,
     val googleMapsLink: String,
-    val distance: Long
+    val distance: Double
 )

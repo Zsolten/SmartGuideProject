@@ -1,6 +1,7 @@
 package edu.bbte.smartguide.ui.screen
 
-import android.content.Context
+import android.app.PendingIntent
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -14,33 +15,27 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import edu.bbte.smartguide.R
+import edu.bbte.smartguide.ui.geofence.GeofenceBroadcastReceiver
 import edu.bbte.smartguide.ui.viewModel.HomeViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(viewModel: HomeViewModel, navHostController: NavHostController){
+fun HomeScreen(viewModel: HomeViewModel, navHostController: NavHostController) {
 
-    val systemUiController = rememberSystemUiController()
-    systemUiController.setSystemBarsColor(
-        color = Color.Transparent
-    )
-
-    viewModel.update()
-
-    Column (
+    Column(
         modifier = Modifier.background(Color(0xFF182524))
-    ){
+    ) {
         Image(
             painter = painterResource(id = R.drawable.smartguide_logo), // Replace with your image resource
             contentDescription = null,
@@ -48,7 +43,6 @@ fun HomeScreen(viewModel: HomeViewModel, navHostController: NavHostController){
             modifier = Modifier
                 .height(100.dp)
         )
-
         TabScreen(modifier = Modifier, navHostController, viewModel)
     }
 }
@@ -92,10 +86,38 @@ fun TabScreen(modifier: Modifier, navHostController: NavHostController, viewMode
                 )
             }
         }
-        Spacer(modifier = Modifier.height(5.dp).background(Color(0xFFE2F1E6)))
+        Spacer(
+            modifier = Modifier
+                .height(5.dp)
+                .background(Color(0xFFE2F1E6))
+        )
         when (tabIndex) {
             0 -> LocationsList(navHostController, viewModel)
+//            1 -> GeofencingScreen()
+//            1 -> GeofenceBackgroundScreen()
             1 -> AudioGuideScreen(navHostController, viewModel)
+        }
+    }
+}
+
+//----------------------------------------------------------------------------------------------------------------------------------
+@Composable
+fun GeoFenceInit(
+    modifier: Modifier,
+    navHostController: NavHostController,
+    viewModel: HomeViewModel
+) {
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        val geofencePendingIntent: PendingIntent by lazy {
+            val intent = Intent(context, GeofenceBroadcastReceiver::class.java)
+            PendingIntent.getBroadcast(
+                context,
+                0,
+                intent,
+                PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            )
         }
     }
 }
