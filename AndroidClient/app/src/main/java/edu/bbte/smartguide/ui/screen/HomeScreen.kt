@@ -23,6 +23,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -93,31 +94,7 @@ fun TabScreen(modifier: Modifier, navHostController: NavHostController, viewMode
         )
         when (tabIndex) {
             0 -> LocationsList(navHostController, viewModel)
-//            1 -> GeofencingScreen()
-//            1 -> GeofenceBackgroundScreen()
-            1 -> AudioGuideScreen(navHostController, viewModel)
-        }
-    }
-}
-
-//----------------------------------------------------------------------------------------------------------------------------------
-@Composable
-fun GeoFenceInit(
-    modifier: Modifier,
-    navHostController: NavHostController,
-    viewModel: HomeViewModel
-) {
-    val context = LocalContext.current
-
-    LaunchedEffect(Unit) {
-        val geofencePendingIntent: PendingIntent by lazy {
-            val intent = Intent(context, GeofenceBroadcastReceiver::class.java)
-            PendingIntent.getBroadcast(
-                context,
-                0,
-                intent,
-                PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-            )
+            1 -> AudioGuideScreen()
         }
     }
 }

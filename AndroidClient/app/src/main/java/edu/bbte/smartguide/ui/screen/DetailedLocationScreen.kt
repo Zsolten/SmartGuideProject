@@ -50,7 +50,6 @@ import edu.bbte.smartguide.R
 import edu.bbte.smartguide.ui.viewModel.HomeViewModel
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailedLocationScreen(viewModel: HomeViewModel, navHostController: NavHostController) {
     val data = viewModel.selectedLocation
@@ -114,7 +113,8 @@ fun DetailedLocationScreen(viewModel: HomeViewModel, navHostController: NavHostC
                             style = MaterialTheme.typography.headlineLarge,
                             modifier = Modifier
                                 .padding(16.dp)
-                                .align(Alignment.CenterHorizontally)
+                                .align(Alignment.CenterHorizontally),
+                            color = Color.Black
                         )
                     }
                 }
@@ -123,11 +123,13 @@ fun DetailedLocationScreen(viewModel: HomeViewModel, navHostController: NavHostC
                     Column(modifier = Modifier.padding(10.dp)) {
                         Text(
                             text = "Nyitvatartas: ",
-                            style = MaterialTheme.typography.titleMedium
+                            style = MaterialTheme.typography.titleMedium,
+                            color = Color.Black
                         )
                         Text(
                             text = data.openHours,
-                            style = MaterialTheme.typography.bodyLarge
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = Color.Black
                         )
 
 
@@ -135,11 +137,13 @@ fun DetailedLocationScreen(viewModel: HomeViewModel, navHostController: NavHostC
 
                         Text(
                             text = "Belepok: ",
-                            style = MaterialTheme.typography.titleMedium
+                            style = MaterialTheme.typography.titleMedium,
+                            color = Color.Black
                         )
                         Text(
                             text = data.prices,
-                            style = MaterialTheme.typography.bodyLarge
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = Color.Black
                         )
 
                         Spacer(modifier = Modifier.height(30.dp))
@@ -147,7 +151,8 @@ fun DetailedLocationScreen(viewModel: HomeViewModel, navHostController: NavHostC
                         Text(
                             text = data.description,
                             style = MaterialTheme.typography.bodyLarge,
-                            textAlign = TextAlign.Justify
+                            textAlign = TextAlign.Justify,
+                            color = Color.Black
                         )
 
                         Spacer(modifier = Modifier.height(16.dp))
@@ -167,6 +172,7 @@ fun DetailedLocationScreen(viewModel: HomeViewModel, navHostController: NavHostC
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
                     text = "Loading location data...",
+                    color = Color.Black
                 )
             }
         }

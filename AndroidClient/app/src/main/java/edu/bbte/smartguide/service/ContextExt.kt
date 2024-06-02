@@ -1,4 +1,4 @@
-package edu.bbte.smartguide.service.tracking
+package edu.bbte.smartguide.service
 
 import android.Manifest
 import android.content.Context

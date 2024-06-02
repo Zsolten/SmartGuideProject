@@ -1,4 +1,4 @@
-package edu.bbte.smartguide.ui.geofence
+package edu.bbte.smartguide.ui.permission
 
 
 import android.content.Intent
@@ -28,20 +28,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.MultiplePermissionsState
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 
-/**
- * The PermissionBox uses a [Box] to show a simple permission request UI when the provided [permission]
- * is revoked or the provided [onGranted] content if the permission is granted.
- *
- * This composable follows the permission request flow but for a complete example check the samples
- * under privacy/permissions
- */
 @Composable
 fun PermissionBox(
     modifier: Modifier = Modifier,
@@ -59,12 +54,7 @@ fun PermissionBox(
     ) { onGranted() }
 }
 
-/**
- * A variation of [PermissionBox] that takes a list of permissions and only calls [onGranted] when
- * all the [requiredPermissions] are granted.
- *
- * By default it assumes that all [permissions] are required.
- */
+
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun PermissionBox(
@@ -85,7 +75,7 @@ fun PermissionBox(
         errorText = if (rejectedPermissions.none { it in requiredPermissions }) {
             ""
         } else {
-            "${rejectedPermissions.joinToString()} required for the sample"
+            rejectedPermissions.joinToString()
         }
     }
     val allRequiredPermissionsGranted =
@@ -156,20 +146,24 @@ private fun PermissionScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
-            text = "Sample requires permission/s:",
+            text = "A mobil idegenvezető funkciónak a következő engedélyekre van szüksége:",
             style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.padding(16.dp),
+            textAlign = TextAlign.Center,
+            color = Color.White
         )
         Text(
             text = permissions,
             style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.padding(16.dp),
+            color = Color.White
         )
         if (description != null) {
             Text(
                 text = description,
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(16.dp),
+                color = Color.White
             )
         }
         Button(
@@ -181,7 +175,10 @@ private fun PermissionScreen(
                 }
             },
         ) {
-            Text(text = "Grant permissions")
+            Text(
+                text = "Engedélyezem",
+                color = Color.White
+                )
         }
         if (errorText.isNotBlank()) {
             Text(
@@ -197,10 +194,14 @@ private fun PermissionScreen(
                 showRationale = false
             },
             title = {
-                Text(text = "Permissions required by the sample")
+                Text(text = "Az alkalmazáshoz szükséges engedélyek",
+                    color = Color.White
+                    )
             },
             text = {
-                Text(text = "The sample requires the following permissions to work:\n $permissions")
+                Text(text = "Az alkalmazás a következő engedélyekkel működhet:\n $permissions",
+                    color = Color.White
+                    )
             },
             confirmButton = {
                 TextButton(
@@ -209,7 +210,9 @@ private fun PermissionScreen(
                         state.launchMultiplePermissionRequest()
                     },
                 ) {
-                    Text("Continue")
+                    Text("Continue",
+                        color = Color.White
+                        )
                 }
             },
             dismissButton = {
@@ -218,7 +221,9 @@ private fun PermissionScreen(
                         showRationale = false
                     },
                 ) {
-                    Text("Dismiss")
+                    Text("Dismiss",
+                        color = Color.White
+                        )
                 }
             },
         )

@@ -4,13 +4,16 @@ import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.util.Log
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.Geofence.GEOFENCE_TRANSITION_ENTER
 import com.google.android.gms.location.GeofencingRequest
 import com.google.android.gms.location.LocationServices
 import edu.bbte.smartguide.model.Regions
+import edu.bbte.smartguide.retrofit.RetrofitInstance
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class GeofenceManager(context: Context) {
     private val TAG = "GeofenceManager"
@@ -35,6 +38,30 @@ class GeofenceManager(context: Context) {
         geofenceList[key] = createGeofence(key, latitude, longitude, radiusInMeters)
     }
 
+    fun addGeofencesFromDb() {
+        val call: Call<List<Regions>> = RetrofitInstance.apiService.getRegions()
+
+        call.enqueue(object : Callback<List<Regions>> {
+            override fun onResponse(
+                call: Call<List<Regions>>,
+                response: Response<List<Regions>>
+            ) {
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        addGeofencesFromRegions(it)
+                        registerGeofence()
+                    }
+                } else {
+                    Log.d("API_RESPONSE", "Unsuccessful response: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<List<Regions>>, t: Throwable) {
+                Log.d("API_RESPONSE", "Network Error", t)
+            }
+        })
+    }
+
 
     fun addGeofencesFromRegions(
         regions: List<Regions>,
@@ -57,6 +84,7 @@ class GeofenceManager(context: Context) {
 
     @SuppressLint("MissingPermission")
     fun registerGeofence() {
+        val success = false
         client.addGeofences(createGeofencingRequest(), geofencingPendingIntent)
             .addOnSuccessListener {
                 Log.d(TAG, "registerGeofence: SUCCESS, list size: ${geofenceList.size}")
@@ -66,6 +94,7 @@ class GeofenceManager(context: Context) {
     }
 
     fun deregisterGeofence() = kotlin.runCatching {
+        Log.d(TAG, "Deregistered the geofences")
         client.removeGeofences(geofencingPendingIntent)
         geofenceList.clear()
     }

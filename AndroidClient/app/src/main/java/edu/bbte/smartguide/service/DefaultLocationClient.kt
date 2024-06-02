@@ -1,4 +1,4 @@
-package edu.bbte.smartguide.service.tracking
+package edu.bbte.smartguide.service
 
 import android.annotation.SuppressLint
 import android.content.Context

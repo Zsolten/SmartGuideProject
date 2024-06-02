@@ -1,6 +1,5 @@
 package edu.bbte.smartguide.ui.navigation
 
-import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
@@ -25,10 +24,5 @@ fun Navigation() {
         composable("detailedLocation") {
             DetailedLocationScreen(viewModel = viewModel, navHostController = navController)
         }
-
-//        composable("splash"){
-//            SplashScreen(navHostController = navController)
-//        }
-
     }
 }

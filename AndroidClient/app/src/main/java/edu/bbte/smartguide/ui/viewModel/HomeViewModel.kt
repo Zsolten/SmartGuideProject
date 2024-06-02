@@ -3,6 +3,7 @@ package edu.bbte.smartguide.ui.viewModel
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -26,10 +27,6 @@ class HomeViewModel() : ViewModel() {
     var tabIndex by mutableIntStateOf(0)
         private set
 
-    private val _regionData: MutableStateFlow<List<Regions>> = MutableStateFlow(listOf())
-    val regionsData: StateFlow<List<Regions>> = _regionData
-
-
     fun tabIndex(index: Int) {
         viewModelScope.launch {
             tabIndex = index
@@ -42,10 +39,6 @@ class HomeViewModel() : ViewModel() {
 
     fun selectLocation(id: Long) {
         retrieveLocationById(id)
-    }
-
-    fun update() {
-        retrieveLocationsData()
     }
 
     fun updateWithDistance(latitude: Double, longitude: Double) {
@@ -124,5 +117,6 @@ class HomeViewModel() : ViewModel() {
             })
         }
     }
-
 }
+
+

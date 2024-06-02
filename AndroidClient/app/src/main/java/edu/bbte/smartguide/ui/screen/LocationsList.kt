@@ -3,6 +3,7 @@ package edu.bbte.smartguide.ui.screen
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -72,8 +73,9 @@ fun LocationsList(navHostController: NavHostController, viewModel: HomeViewModel
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
+            Log.d("Location", "Permission granted, lekerem a pontokat")
             locationClient.getCurrentLocation(
-                Priority.PRIORITY_HIGH_ACCURACY,
+                Priority.PRIORITY_BALANCED_POWER_ACCURACY,
                 CancellationTokenSource().token
             ).addOnSuccessListener {
                 if (it != null) {
@@ -142,7 +144,8 @@ fun LocationsList(navHostController: NavHostController, viewModel: HomeViewModel
                             )
 
                             Text(
-                                text = "${locationsData[it].city}\n" +
+                                text = "${locationsData[it].city}\n"
+                                        +
                                         "${locationsData[it].category}\n",
                                 style = TextStyle(
                                     fontSize = 16.sp,
@@ -171,9 +174,4 @@ fun LocationsList(navHostController: NavHostController, viewModel: HomeViewModel
             }
         }
     }
-}
-
-@Composable
-fun loadLocations(){
-
 }
