@@ -49,6 +49,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.CancellationTokenSource
+import edu.bbte.smartguide.model.Locations
 import edu.bbte.smartguide.ui.viewModel.HomeViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -91,84 +92,90 @@ fun LocationsList(navHostController: NavHostController, viewModel: HomeViewModel
             .background(Color(0xFF182524))
             .fillMaxSize()
     ) {
-        items(count = locationsData.size) {
-            Card(
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                ),
+        items(locationsData.size) {i ->
+            LocationCard(navHostController, viewModel, locationsData[i])
+        }
+    }
+}
+
+
+@Composable
+fun LocationCard(navHostController: NavHostController, viewModel: HomeViewModel, location: Locations) {
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+        ),
+        modifier = Modifier
+            .padding(8.dp, 1.dp)
+            .fillMaxWidth()
+            .size(140.dp)
+            .clickable {
+                viewModel.selectLocation(location.id)
+                navHostController.navigate("detailedLocation")
+            }
+    ) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                painter = rememberAsyncImagePainter(location.pictureUrl),//painterResource(id = R.drawable.image1),
+                contentDescription = location.name,
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .padding(8.dp, 1.dp)
+                    .matchParentSize()
+                    .background(Color(0xFF166963))
+            )
+            Row(
+                modifier = Modifier
                     .fillMaxWidth()
-                    .size(140.dp)
-                    .clickable {
-                        viewModel.selectLocation(locationsData[it].id)
-                        navHostController.navigate("detailedLocation")
-                    }
+                    .padding(8.dp)
             ) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
+
+                Spacer(modifier = Modifier.width(10.dp))
+
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxSize()
                 ) {
-                    Image(
-                        painter = rememberAsyncImagePainter(locationsData[it].pictureUrl),//painterResource(id = R.drawable.image1),
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .matchParentSize()
-                            .background(Color(0xFF166963))
+                    val offset = Offset(5.0f, 4.0f)
+                    Text(
+                        text = location.name,
+                        style = TextStyle(
+                            fontSize = 27.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFFE2F1E6),
+                            shadow = Shadow(
+                                color = Color.Black, offset = offset, blurRadius = 3f
+                            )
+                        )
                     )
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
-                    ) {
 
-                        Spacer(modifier = Modifier.width(10.dp))
+                    Text(
+                        text = "${location.city}\n"
+                                +
+                                "${location.category}\n",
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            color = Color(0xFFE2F1E6),
+                            shadow = Shadow(
+                                color = Color.Black, offset = offset, blurRadius = 4f
+                            )
+                        )
+                    )
 
-                        Column(
-                            modifier = Modifier
-                                .weight(1f)
-                                .fillMaxSize()
-                        ) {
-                            val offset = Offset(5.0f, 4.0f)
-                            Text(
-                                text = locationsData[it].name,
-                                style = TextStyle(
-                                    fontSize = 27.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = Color(0xFFE2F1E6),
-                                    shadow = Shadow(
-                                        color = Color.Black, offset = offset, blurRadius = 3f
-                                    )
+                    if (location.distance != 0.0) {
+                        Text(
+                            text = "${location.distance.toLong()} km",
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                color = Color(0xFFE2F1E6),
+                                shadow = Shadow(
+                                    color = Color.Black, offset = offset, blurRadius = 4f
                                 )
                             )
-
-                            Text(
-                                text = "${locationsData[it].city}\n"
-                                        +
-                                        "${locationsData[it].category}\n",
-                                style = TextStyle(
-                                    fontSize = 16.sp,
-                                    color = Color(0xFFE2F1E6),
-                                    shadow = Shadow(
-                                        color = Color.Black, offset = offset, blurRadius = 4f
-                                    )
-                                )
-                            )
-
-                            if (locationsData[it].distance != 0.0) {
-                                Text(
-                                    text = "${locationsData[it].distance.toLong()} km",
-                                    style = TextStyle(
-                                        fontSize = 16.sp,
-                                        color = Color(0xFFE2F1E6),
-                                        shadow = Shadow(
-                                            color = Color.Black, offset = offset, blurRadius = 4f
-                                        )
-                                    )
-                                )
-                            }
-                        }
+                        )
                     }
                 }
             }

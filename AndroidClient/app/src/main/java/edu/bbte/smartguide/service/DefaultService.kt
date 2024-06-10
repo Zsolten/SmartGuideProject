@@ -29,22 +29,15 @@ class DefaultService: Service() {
     private lateinit var mediaPlayer: MediaPlayer
     private val TAG = "DefaultService"
 
-    class LocalBinder : Binder() {
-        val service: DefaultService
-            get() =  DefaultService()
-    }
-
-    private val binder: IBinder = LocalBinder()
-
-    override fun onBind(p0: Intent?): IBinder {
-        return binder
+    override fun onBind(p0: Intent?): IBinder? {
+        return null
     }
 
     override fun onCreate() {
         super.onCreate()
         locationClient = DefaultLocationClient(
             applicationContext,
-            LocationServices.getFusedLocationProviderClient(applicationContext)
+            com.google.android.gms.location.LocationServices.getFusedLocationProviderClient(applicationContext)
         )
         geofenceManager = GeofenceManager(this)
     }
@@ -64,9 +57,6 @@ class DefaultService: Service() {
     private fun start() {
         Log.d(TAG, "Started")
 
-//        val stopNotificationIntent = Intent(this, DefaultService::class.java).apply {
-//            action = ACTION_STOP
-//        }
         val stopNotificationIntent = PendingIntent.getService(this,
             0,
             Intent(this, DefaultService::class.java).apply {

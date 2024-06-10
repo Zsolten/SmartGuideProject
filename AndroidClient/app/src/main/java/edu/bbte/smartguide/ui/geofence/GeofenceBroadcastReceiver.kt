@@ -19,7 +19,6 @@ import retrofit2.Response
 class GeofenceBroadcastReceiver : BroadcastReceiver() {
     private val TAG = "~GeofenceReceiver"
 
-    @SuppressLint("MissingPermission")
     override fun onReceive(context: Context?, intent: Intent?) {
         val geofencingEvent = intent?.let { GeofencingEvent.fromIntent(it) }
         if (geofencingEvent?.hasError() == true) {
@@ -33,10 +32,8 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
             val geofenceTransition = geofencingEvent?.geofenceTransition
         ) {
             Geofence.GEOFENCE_TRANSITION_ENTER -> {
-
                 val id = geofencingEvent.triggeringGeofences?.last()?.requestId
-                var region: Regions? = null
-                
+                var region: Regions?
 
                 if (id != null) {
                     val call: Call<Regions> = RetrofitInstance.apiService.getRegionById(id.toLong())

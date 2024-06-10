@@ -38,7 +38,7 @@ fun HomeScreen(viewModel: HomeViewModel, navHostController: NavHostController) {
         modifier = Modifier.background(Color(0xFF182524))
     ) {
         Image(
-            painter = painterResource(id = R.drawable.smartguide_logo), // Replace with your image resource
+            painter = painterResource(id = R.drawable.smartguide_logo),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier

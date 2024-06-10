@@ -41,11 +41,6 @@
             android:exported="true"
             />
 
-        <service
-            android:name=".service.media.AudioService"
-            android:foregroundServiceType="mediaPlayback"
-            android:exported="true"/>
-
         <activity
             android:name=".MainActivity"
             android:exported="true"

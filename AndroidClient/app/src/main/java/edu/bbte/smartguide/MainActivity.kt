@@ -58,3 +58,15 @@ class MainActivity : ComponentActivity() {
         })
     }
 }
+
+
+
+
+
+fun main() {
+    var nullableString: String? = null
+    println(nullableString?.length) // Kiír: null
+
+    nullableString = "Hello"
+    println(nullableString.length) // Kiír: 5
+}
