@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class GoogleMapsConfig {
 
-    @Value("AIzaSyCvBAXmYfvu3ptqfR7C75jC5YI6jR961s8")
+    @Value("API_KEY_NEEDED")
     private String apiKey;
 
     @Bean

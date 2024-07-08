@@ -29,7 +29,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCvBAXmYfvu3ptqfR7C75jC5YI6jR961s8" />
+            android:value="API_KEY_NEEDED" />
 
         <receiver android:name=".ui.geofence.GeofenceBroadcastReceiver"
             android:exported="true"
